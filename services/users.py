@@ -45,13 +45,13 @@ def user_lists(username):
     ''' Get lists based on username '''
 
     try:
-        req = requests.get("http://127.0.0.1:5001/lists/{}".format(username))
+        req = requests.get("http://127.0.0.1:5002/lists/{}".format(username))
     except requests.exceptions.ConnectionError:
         return "Service unavailable"
     return req.text
 
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(port=5003, debug=True)
 
 
