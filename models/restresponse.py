@@ -8,5 +8,11 @@ class RestResponse:
         self.data = data
 
     def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__,
-                          sort_keys=True, indent=4)
+        # return json.dumps(self, default=lambda o: o.__dict__,
+        #                   sort_keys=True, indent=4)
+
+        return {
+            'responseData': json.dumps(self.data),
+            'message': self.message,
+            'status': self.status
+        }
