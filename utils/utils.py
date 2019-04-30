@@ -1,4 +1,4 @@
-from flask import Response
+from flask import Response, jsonify
 
 headers_mapping = {'csv': {'content-type': 'application/csv'},
                    'json': {'content-type': 'application/json'}}
@@ -22,4 +22,7 @@ def error_response(code, message, response=None, status=False , headers='json'):
         'status': status,
         'message': message
     }
-    return Response(res, status, mimetype='application/json')
+    # return Response(res, status=code, mimetype='application/json')
+    r = jsonify(res)
+    r.status_code = code
+    return r
