@@ -5,7 +5,7 @@ from flask import request, abort, jsonify
 
 from models.restresponse import RestResponse
 from models.todos import Todo
-from utils.utils import error_response
+from utils.utils import error_response, ok_response
 
 
 class Todos(Resource):
@@ -50,3 +50,12 @@ class Todos(Resource):
                 todo['status'] = body['status']
                 return todo
         return error_response(404, 'Not Found!')
+
+    def delete(self, todo_id=None):
+        if not todo_id:
+            return error_response(400, 'id not found')
+        for todo in Todo.todos:
+            if todo['id'] == todo_id:
+                Todo.todos.remove(todo)
+                return ok_response("Success")
+        return error_response(404, 'id not found')
