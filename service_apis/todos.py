@@ -22,14 +22,14 @@ class Todos(Resource):
     def post(self):
         if not request.json:
             return error_response(400, 'Body required!')
-        todo = request.json
+        todo = request.json  # add validation for json body
         todo = Todo(description=todo['description'], status=todo['status'])
         # return todo.get_dict()
         return ok_response(todo.get_dict(), code=StatusCodes.CREATED)
 
     def put(self, todo_id=None):
         if not todo_id:
-            return error_response(400, 'id not found')
+            return error_response(405, 'id not found')
         if not request.json:
             return error_response(400, 'Body required!')
         body = request.json        # validate json body
