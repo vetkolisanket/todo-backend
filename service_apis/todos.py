@@ -5,7 +5,7 @@ from flask import request, abort, jsonify
 
 from models.restresponse import RestResponse
 from models.todos import Todo
-from utils.utils import error_response, ok_response
+from utils.utils import error_response, ok_response, StatusCodes
 
 
 class Todos(Resource):
@@ -24,7 +24,8 @@ class Todos(Resource):
             return error_response(400, 'Body required!')
         todo = request.json
         todo = Todo(description=todo['description'], status=todo['status'])
-        return todo.get_dict()
+        # return todo.get_dict()
+        return ok_response(todo.get_dict(), code=StatusCodes.CREATED)
 
     def put(self, todo_id=None):
         if not todo_id:
