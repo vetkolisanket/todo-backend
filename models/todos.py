@@ -1,13 +1,13 @@
 class Todo:
     id = 1
-    todos = []
+    todos = {}
 
     def __init__(self, description, status):
         self.id = Todo.id
         Todo.id += 1
         self.description = description
         self.status = status
-        Todo.todos.append(self.get_dict())
+        Todo.todos[self.id] = self.get_dict()
 
     def get_dict(self):
         return {

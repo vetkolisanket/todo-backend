@@ -11,20 +11,17 @@ from utils.utils import error_response, ok_response, StatusCodes
 class Todos(Resource):
     def get(self, todo_id=None):
         if not todo_id:
-            return jsonify(todos=Todo.todos)
-        for todo in Todo.todos:
-            if todo['id'] == todo_id:
-                # return RestResponse(status=True, data=todo).to_json()
-                # return jsonify(todo)
-                return todo
-        return error_response(404, 'Not Found')
+            return jsonify(todos=Todo.todos.values())
+        try:
+            return ok_response(Todo.todos[todo_id])
+        except KeyError as e:
+            return error_response(404, 'Todo with id {} not found'.format(e.message))
 
     def post(self):
         if not request.json:
             return error_response(400, 'Body required!')
         todo = request.json  # add validation for json body
         todo = Todo(description=todo['description'], status=todo['status'])
-        # return todo.get_dict()
         return ok_response(todo.get_dict(), code=StatusCodes.CREATED)
 
     def put(self, todo_id=None):
@@ -33,12 +30,13 @@ class Todos(Resource):
         if not request.json:
             return error_response(400, 'Body required!')
         body = request.json        # validate json body
-        for todo in Todo.todos:
-            if todo['id'] == todo_id:
-                todo['description'] = body['description']
-                todo['status'] = body['status']
-                return todo
-        return error_response(404, 'Not Found!')
+        try:
+            todo = Todo.todos[todo_id]
+            todo['description'] = body['description']
+            todo['status'] = body['status']
+            return ok_response(todo)
+        except KeyError as e:
+            return error_response(404, 'Todo with id {} not found'.format(e.message))
 
     def patch(self, todo_id=None):
         if not todo_id:
@@ -46,17 +44,18 @@ class Todos(Resource):
         if not request.json:
             return error_response(400, 'Body required!')
         body = request.json
-        for todo in Todo.todos:
-            if todo['id'] == todo_id:
-                todo['status'] = body['status']
-                return todo
-        return error_response(404, 'Not Found!')
+        try:
+            todo = Todo.todos[todo_id]
+            todo['status'] = body['status']
+            return ok_response(todo)
+        except KeyError as e:
+            return error_response(404, 'Todo with id {} not found'.format(e.message))
 
     def delete(self, todo_id=None):
         if not todo_id:
-            return error_response(400, 'id not found')
-        for todo in Todo.todos:
-            if todo['id'] == todo_id:
-                Todo.todos.remove(todo)
-                return ok_response("Success")
-        return error_response(404, 'id not found')
+            return error_response(404, 'Todo with id {} not found'.format(todo_id))
+        try:
+            Todo.todos.pop(todo_id)
+            return ok_response("Success")
+        except KeyError as e:
+            return error_response(404, 'Todo with id {} not found'.format(e.message))
