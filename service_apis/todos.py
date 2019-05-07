@@ -11,7 +11,7 @@ from utils.utils import error_response, ok_response, StatusCodes
 class Todos(Resource):
     def get(self, todo_id=None):
         if not todo_id:
-            return jsonify(todos=Todo.todos.values())
+            return ok_response({"todos": Todo.todos.values()})
         try:
             return ok_response(Todo.todos[todo_id])
         except KeyError as e:

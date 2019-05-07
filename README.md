@@ -4,6 +4,6 @@ A simple todo list
 - GET, POST, PUT, DELETE, PATCH - Done
 - TODO {id, description, status} - Done
 
-- Move to map instead of list
+- Move to map instead of list - Done
 - Validation
 - Use decorators for validation
